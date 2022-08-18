@@ -1,0 +1,266 @@
+{
+  "version": "v1",
+  "config": {
+    "visState": {
+      "filters": [],
+      "layers": [
+        {
+          "id": "hzc32m9",
+          "type": "trip",
+          "config": {
+            "dataId": "5b1fd10b-cbee-42bc-b162-4536e0c9252d",
+            "columnMode": "table",
+            "label": "Flights",
+            "color": [
+              255,
+              254,
+              230
+            ],
+            "columns": {
+              "id": "icao24",
+              "lat": "lat",
+              "lng": "lon",
+              "timestamp": "timestamp",
+              "altitude": "altitude"
+            },
+            "isVisible": true,
+            "visConfig": {
+              "opacity": 0.8,
+              "thickness": 0.5,
+              "colorRange": {
+                "name": "Ice And Fire",
+                "type": "diverging",
+                "colors": [
+                  "#0198BD",
+                  "#42C1BC",
+                  "#9CE3B1",
+                  "#F5B272",
+                  "#EB7053",
+                  "#D50255"
+                ],
+                "category": "Uber"
+              },
+              "trailLength": 175,
+              "fadeTrail": true,
+              "billboard": false,
+              "sizeRange": [
+                0,
+                10
+              ],
+              "sizeScale": 4,
+              "scenegraph": "boeing777",
+              "scenegraphEnabled": true,
+              "scenegraphColorEnabled": true,
+              "scenegraphUseTrailColor": true,
+              "scenegraphColor": null,
+              "scenegraphCustomModelUrl": "",
+              "adjustRoll": 0,
+              "adjustPitch": 0,
+              "adjustYaw": 0,
+              "invertRoll": true,
+              "invertPitch": false,
+              "invertYaw": false,
+              "fixedRoll": true,
+              "fixedPitch": true,
+              "fixedYaw": true
+            },
+            "hidden": false,
+            "textLabel": [
+              {
+                "field": [],
+                "color": [
+                  137,
+                  218,
+                  193
+                ],
+                "size": 16,
+                "offset": [
+                  0,
+                  0
+                ],
+                "anchor": "start",
+                "alignment": "center",
+                "backgroundColor": null
+              }
+            ]
+          },
+          "visualChannels": {
+            "colorField": {
+              "name": "icao24",
+              "type": "string"
+            },
+            "colorScale": "ordinal",
+            "sizeField": null,
+            "sizeScale": "linear",
+            "rollField": null,
+            "rollScale": "linear",
+            "pitchField": null,
+            "pitchScale": "linear",
+            "yawField": null,
+            "yawScale": "linear"
+          }
+        }
+      ],
+      "interactionConfig": {
+        "tooltip": {
+          "fieldsToShow": {
+            "5b1fd10b-cbee-42bc-b162-4536e0c9252d": [
+              {
+                "name": "icao24",
+                "format": null
+              },
+              {
+                "name": "callsign",
+                "format": null
+              },
+              {
+                "name": "altitude",
+                "format": null
+              },
+              {
+                "name": "timestamp",
+                "format": null
+              },
+              {
+                "name": "lat",
+                "format": null
+              }
+            ]
+          },
+          "compareMode": false,
+          "compareType": "absolute",
+          "enabled": true
+        },
+        "brush": {
+          "size": 0.5,
+          "enabled": false
+        },
+        "geocoder": {
+          "enabled": false
+        },
+        "coordinate": {
+          "enabled": false
+        }
+      },
+      "layerBlending": "normal",
+      "overlayBlending": "normal",
+      "splitMaps": [],
+      "animationConfig": {
+        "currentTime": 1567555200,
+        "speed": 0.02
+      },
+      "editor": {
+        "features": [],
+        "visible": true
+      },
+      "metrics": [
+        {
+          "dataId": "5b1fd10b-cbee-42bc-b162-4536e0c9252d",
+          "expression": "CS +'\nALT '+padStart(str(floor(ALT)),6)",
+          "id": "metric#oakwdjdbi",
+          "label": "label",
+          "windowFunctionId": "RECTANGLE",
+          "windowSize": 1
+        }
+      ],
+      "geoKeys": [],
+      "groupBys": [],
+      "datasets": {
+        "fieldDisplayNames": {
+          "5b1fd10b-cbee-42bc-b162-4536e0c9252d": {
+            "callsign": "CS",
+            "altitude": "ALT",
+            "timestamp": "T",
+            "metric#oakwdjdbi": "label"
+          }
+        },
+        "fieldDisplayFormats": {
+          "5b1fd10b-cbee-42bc-b162-4536e0c9252d": {}
+        },
+        "datasetColors": {
+          "5b1fd10b-cbee-42bc-b162-4536e0c9252d": [
+            143,
+            47,
+            191
+          ]
+        }
+      },
+      "joins": [],
+      "analyses": [],
+      "charts": []
+    },
+    "mapState": {
+      "bearing": -54.58942576699851,
+      "dragRotate": true,
+      "latitude": 46.1921,
+      "longitude": 14.6057,
+      "pitch": 35.59696248928568,
+      "zoom": 8,
+      "isSplit": false,
+      "isViewportSynced": true,
+      "isZoomLocked": false,
+      "splitMapViewports": [],
+      "mapViewMode": "MODE_3D",
+      "mapSplitMode": "SINGLE_MAP",
+      "globe": {
+        "enabled": false,
+        "config": {
+          "atmosphere": true,
+          "azimuth": false,
+          "azimuthAngle": 45,
+          "terminator": true,
+          "terminatorOpacity": 0.35,
+          "basemap": true,
+          "labels": false,
+          "labelsColor": [
+            114.75,
+            114.75,
+            114.75
+          ],
+          "adminLines": true,
+          "adminLinesColor": [
+            40,
+            63,
+            93
+          ],
+          "water": true,
+          "waterColor": [
+            17,
+            35,
+            48
+          ],
+          "surface": true,
+          "surfaceColor": [
+            9,
+            16,
+            29
+          ]
+        }
+      }
+    },
+    "mapStyle": {
+      "styleType": "dark",
+      "topLayerGroups": {},
+      "visibleLayerGroups": {
+        "label": true,
+        "road": true,
+        "border": false,
+        "building": true,
+        "water": true,
+        "land": true,
+        "3d building": false
+      },
+      "threeDBuildingColor": [
+        9.665468314072012,
+        17.18305478057247,
+        31.1442867897876
+      ],
+      "backgroundColor": [
+        255,
+        255,
+        255
+      ],
+      "mapStyles": {}
+    }
+  }
+}
