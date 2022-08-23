@@ -26,8 +26,11 @@ const TRIP_LAYER_ID = "hzc32m9";
       deckProps,
       { mapIndex, DeckGLLayers, layerTimeline, layersRenderData }
     ) => {
+      const { currentTime } = layerTimeline;
       const { layers } = deckProps;
-      const { position, advancement } = layersRenderData[TRIP_LAYER_ID].data[0];
+      const { position } = layersRenderData[TRIP_LAYER_ID].data[0];
+      const pulseRate = 1 / 20000;
+      const t = (currentTime % (1 / pulseRate)) * pulseRate;
       return {
         layers: [
           new DeckGLLayers.ScatterplotLayer({
@@ -37,7 +40,7 @@ const TRIP_LAYER_ID = "hzc32m9";
             opacity: 1,
             stroked: true,
             filled: false,
-            radiusScale: advancement,
+            radiusScale: t,
             radiusUnits: "pixels",
             lineWidthMinPixels: 3,
             getPosition: position,
@@ -46,7 +49,7 @@ const TRIP_LAYER_ID = "hzc32m9";
               255,
               0,
               (255 * i) / NUM_CIRCLES,
-              (1.0 - advancement) * 255,
+              (1.0 - t) * 255,
             ],
           }),
           ...layers,
