@@ -47,7 +47,7 @@
                 0,
                 10
               ],
-              "sizeScale": 4,
+              "sizeScale": 3,
               "scenegraph": "boeing777",
               "scenegraphEnabled": true,
               "scenegraphColorEnabled": true,

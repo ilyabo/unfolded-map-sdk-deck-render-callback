@@ -8,10 +8,58 @@ const TRIP_LAYER_ID = "hzc32m9";
 
 (async () => {
   const mapConfig = await (await fetch("/data/map-config.json")).json();
-  const flightData = csvParse(
-    await (await fetch("/data/flight-data.csv")).text()
+  const flightData = generateData(
+    csvParse(await (await fetch("/data/flight-data.csv")).text()),
+    10
   );
-  const map = await createMap({ container: document.querySelector("#root") });
+  const map = await createMap({
+    container: document.querySelector("#root"),
+    _deckRenderCallbacks: {
+      onLoad: (deck) => {
+        console.log("onLoad deck", deck);
+      },
+      onRender: (
+        deckProps,
+        { deck, layersRenderData, layerTimeline, mapIndex }
+      ) => {
+        const { layers } = deckProps;
+        const renderData = layersRenderData[TRIP_LAYER_ID];
+        if (renderData) {
+          const pulsePeriod = 20000;
+          const { currentTime, data } = renderData;
+          const t = (currentTime % pulsePeriod) / pulsePeriod;
+          return {
+            layers: [
+              ...data.map(
+                (d, di) =>
+                  new deck.ScatterplotLayer({
+                    id: `pulse-layer-${di}`,
+                    data: range(NUM_CIRCLES),
+                    pickable: false,
+                    opacity: 1,
+                    stroked: true,
+                    filled: false,
+                    radiusScale: t,
+                    radiusUnits: "pixels",
+                    lineWidthMinPixels: 3,
+                    getPosition: d.position,
+                    getRadius: (i) => 100 * (i / NUM_CIRCLES),
+                    getLineColor: (i) => [
+                      255 - 128 * di,
+                      0 + 128 * di,
+                      (255 * i) / NUM_CIRCLES,
+                      (1.0 - t) * 255,
+                    ],
+                  })
+              ),
+              ...layers,
+            ],
+          };
+        }
+        return deckProps;
+      },
+    },
+  });
   map.setMapConfig(mapConfig, {
     additionalDatasets: [
       {
@@ -21,40 +69,22 @@ const TRIP_LAYER_ID = "hzc32m9";
       },
     ],
   });
-  map._setDeckRenderCallback(
-    (
-      deckProps,
-      { mapIndex, DeckGLLayers, layerTimeline, layersRenderData }
-    ) => {
-      const { currentTime } = layerTimeline;
-      const { layers } = deckProps;
-      const { position } = layersRenderData[TRIP_LAYER_ID].data[0];
-      const pulseRate = 1 / 20000;
-      const t = (currentTime % (1 / pulseRate)) * pulseRate;
-      return {
-        layers: [
-          new DeckGLLayers.ScatterplotLayer({
-            id: "my-scatterplot-layer",
-            data: range(NUM_CIRCLES),
-            pickable: false,
-            opacity: 1,
-            stroked: true,
-            filled: false,
-            radiusScale: t,
-            radiusUnits: "pixels",
-            lineWidthMinPixels: 3,
-            getPosition: position,
-            getRadius: (i) => 100 * (i / NUM_CIRCLES),
-            getLineColor: (i) => [
-              255,
-              0,
-              (255 * i) / NUM_CIRCLES,
-              (1.0 - t) * 255,
-            ],
-          }),
-          ...layers,
-        ],
-      };
-    }
-  );
 })();
+
+function generateData(data, n) {
+  const newData = [];
+  for (let i = 0; i < n; i++) {
+    for (let di = 0; di < data.length; di++) {
+      const d = data[di];
+      newData.push({
+        ...d,
+        icao24: d.icao24 + i,
+        timestamp: +d.timestamp + 50 * i,
+        lat: +d.lat + 0.1 * i + Math.random() * 0.01,
+        lon: +d.lon + 0.1 * i + Math.random() * 0.01,
+        altitude: +d.altitude + 0.1 * i + Math.random() * 0.01,
+      });
+    }
+  }
+  return newData;
+}
