@@ -35,41 +35,40 @@ function onDeckRender(
   deckProps,
   { deck, layersRenderData, layerTimeline, mapIndex }
 ) {
-  const { layers } = deckProps;
   const renderData = layersRenderData[TRIP_LAYER_ID];
-  if (renderData) {
-    const pulsePeriod = 20000;
-    const { currentTime, data } = renderData;
-    const t = (currentTime % pulsePeriod) / pulsePeriod;
-    return {
-      layers: [
-        ...data.map(
-          (d, di) =>
-            new deck.ScatterplotLayer({
-              id: `pulse-layer-${di}`,
-              data: range(NUM_CIRCLES),
-              pickable: false,
-              opacity: 1,
-              stroked: true,
-              filled: false,
-              radiusScale: t,
-              radiusUnits: "pixels",
-              lineWidthMinPixels: 3,
-              getPosition: d.position,
-              getRadius: (i) => 100 * (i / NUM_CIRCLES),
-              getLineColor: (i) => [
-                255 - 128 * di,
-                0 + 128 * di,
-                (255 * i) / NUM_CIRCLES,
-                (1.0 - t) * 255,
-              ],
-            })
-        ),
-        ...layers,
-      ],
-    };
+  if (!renderData) {
+    return deckProps;
   }
-  return deckProps;
+  const pulsePeriod = 20000;
+  const { currentTime, data } = renderData;
+  const t = (currentTime % pulsePeriod) / pulsePeriod;
+  return {
+    layers: [
+      ...data.map(
+        (d, di) =>
+          new deck.ScatterplotLayer({
+            id: `pulse-layer-${di}`,
+            data: range(NUM_CIRCLES),
+            pickable: false,
+            opacity: 1,
+            stroked: true,
+            filled: false,
+            radiusScale: t,
+            radiusUnits: "pixels",
+            lineWidthMinPixels: 3,
+            getPosition: d.position,
+            getRadius: (i) => 100 * (i / NUM_CIRCLES),
+            getLineColor: (i) => [
+              255 - 128 * di,
+              0 + 128 * di,
+              (255 * i) / NUM_CIRCLES,
+              (1.0 - t) * 255,
+            ],
+          })
+      ),
+      ...deckProps.layers,
+    ],
+  };
 }
 
 async function generateData(n = 10) {
