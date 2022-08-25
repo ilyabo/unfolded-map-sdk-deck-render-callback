@@ -8,56 +8,12 @@ const TRIP_LAYER_ID = "hzc32m9";
 
 (async () => {
   const mapConfig = await (await fetch("/data/map-config.json")).json();
-  const flightData = generateData(
-    csvParse(await (await fetch("/data/flight-data.csv")).text()),
-    10
-  );
+  const flightData = await generateData();
   const map = await createMap({
     container: document.querySelector("#root"),
     _deckRenderCallbacks: {
-      onLoad: (deck) => {
-        console.log("onLoad deck", deck);
-      },
-      onRender: (
-        deckProps,
-        { deck, layersRenderData, layerTimeline, mapIndex }
-      ) => {
-        const { layers } = deckProps;
-        const renderData = layersRenderData[TRIP_LAYER_ID];
-        if (renderData) {
-          const pulsePeriod = 20000;
-          const { currentTime, data } = renderData;
-          const t = (currentTime % pulsePeriod) / pulsePeriod;
-          return {
-            layers: [
-              ...data.map(
-                (d, di) =>
-                  new deck.ScatterplotLayer({
-                    id: `pulse-layer-${di}`,
-                    data: range(NUM_CIRCLES),
-                    pickable: false,
-                    opacity: 1,
-                    stroked: true,
-                    filled: false,
-                    radiusScale: t,
-                    radiusUnits: "pixels",
-                    lineWidthMinPixels: 3,
-                    getPosition: d.position,
-                    getRadius: (i) => 100 * (i / NUM_CIRCLES),
-                    getLineColor: (i) => [
-                      255 - 128 * di,
-                      0 + 128 * di,
-                      (255 * i) / NUM_CIRCLES,
-                      (1.0 - t) * 255,
-                    ],
-                  })
-              ),
-              ...layers,
-            ],
-          };
-        }
-        return deckProps;
-      },
+      onLoad: onDeckLoad,
+      onRender: onDeckRender,
     },
   });
   map.setMapConfig(mapConfig, {
@@ -71,7 +27,53 @@ const TRIP_LAYER_ID = "hzc32m9";
   });
 })();
 
-function generateData(data, n) {
+function onDeckLoad(deck) {
+  console.log("onLoad deck", deck);
+}
+
+function onDeckRender(
+  deckProps,
+  { deck, layersRenderData, layerTimeline, mapIndex }
+) {
+  const { layers } = deckProps;
+  const renderData = layersRenderData[TRIP_LAYER_ID];
+  if (renderData) {
+    const pulsePeriod = 20000;
+    const { currentTime, data } = renderData;
+    const t = (currentTime % pulsePeriod) / pulsePeriod;
+    return {
+      layers: [
+        ...data.map(
+          (d, di) =>
+            new deck.ScatterplotLayer({
+              id: `pulse-layer-${di}`,
+              data: range(NUM_CIRCLES),
+              pickable: false,
+              opacity: 1,
+              stroked: true,
+              filled: false,
+              radiusScale: t,
+              radiusUnits: "pixels",
+              lineWidthMinPixels: 3,
+              getPosition: d.position,
+              getRadius: (i) => 100 * (i / NUM_CIRCLES),
+              getLineColor: (i) => [
+                255 - 128 * di,
+                0 + 128 * di,
+                (255 * i) / NUM_CIRCLES,
+                (1.0 - t) * 255,
+              ],
+            })
+        ),
+        ...layers,
+      ],
+    };
+  }
+  return deckProps;
+}
+
+async function generateData(n = 10) {
+  const data = csvParse(await (await fetch("/data/flight-data.csv")).text());
   const newData = [];
   for (let i = 0; i < n; i++) {
     for (let di = 0; di < data.length; di++) {
