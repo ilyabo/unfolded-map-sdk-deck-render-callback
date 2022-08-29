@@ -11,9 +11,9 @@ const TRIP_LAYER_ID = "hzc32m9";
   const flightData = await generateData();
   const map = await createMap({
     container: document.querySelector("#root"),
-    _deckRenderCallbacks: {
-      onLoad: onDeckLoad,
-      onRender: onDeckRender,
+    eventHandlers: {
+      _onDeckLoad: onDeckLoad,
+      _onDeckRender: onDeckRender,
     },
   });
   map.setMapConfig(mapConfig, {
