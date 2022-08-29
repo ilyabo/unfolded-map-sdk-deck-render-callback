@@ -27,8 +27,8 @@ const TRIP_LAYER_ID = "hzc32m9";
   });
 })();
 
-function onDeckLoad(deck) {
-  console.log("onLoad deck", deck);
+function onDeckLoad({ deck }) {
+  console.log("onDeckLoad", deck);
 }
 
 function onDeckRender(
