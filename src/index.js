@@ -1,4 +1,5 @@
-import { createMap } from "http://localhost:8090/index.js";
+// import { createMap } from "http://localhost:8090/index.js";
+import { createMap } from "@unfolded/map-sdk";
 import { csvParse, range } from "d3";
 import "./css/main.css";
 
