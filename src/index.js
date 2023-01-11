@@ -1,5 +1,6 @@
 // import { createMap } from "http://localhost:8090/index.js";
-import { createMap } from "@unfolded/map-sdk";
+// import { createMap } from "@unfolded/map-sdk";
+import {createUnfoldedRenderTarget} from './lib/unfolded-render-target'
 import { csvParse, range } from "d3";
 import "./css/main.css";
 
@@ -10,14 +11,14 @@ const TRIP_LAYER_ID = "hzc32m9";
 (async () => {
   const mapConfig = await (await fetch("/data/map-config.json")).json();
   const flightData = await generateData();
-  const map = await createMap({
-    container: document.querySelector("#root"),
-    eventHandlers: {
-      _onDeckLoad: onDeckLoad,
-      _onDeckRender: onDeckRender,
-    },
-  });
-  map.setMapConfig(mapConfig, {
+  const {unfoldedMap, renderer} = await createUnfoldedRenderTarget(
+    document.querySelector("#unfolded"),
+    document.querySelector("#interleaved-deck"),
+    onDeckRender
+  );
+
+  const mapSdk = unfoldedMap.getMapSdk();
+  mapSdk.setMapConfig(mapConfig, {
     additionalDatasets: [
       {
         id: DATASET_ID,

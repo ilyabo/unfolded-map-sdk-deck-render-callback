@@ -239,7 +239,7 @@
       }
     },
     "mapStyle": {
-      "styleType": "dark",
+      "styleType": "konturDark",
       "topLayerGroups": {},
       "visibleLayerGroups": {
         "label": true,
